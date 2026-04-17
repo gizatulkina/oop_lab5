@@ -4,27 +4,11 @@ using namespace std;
 class Base {
 public:
     Base() {
-        cout << "[Base] Конструктор без параметров\n";
+        cout << "[Base] Конструктор\n";
     }
 
     virtual ~Base() {
         cout << "[Base] Деструктор\n";
-    }
-
-    void method1NonVirtual() {
-        method2NonVirtual();
-    }
-
-    void method2NonVirtual() {
-        cout << "[Base] method2NonVirtual\n";
-    }
-
-    virtual void method1Virtual() {
-        method2Virtual();
-    }
-
-    virtual void method2Virtual() {
-        cout << "[Base] method2Virtual\n";
     }
 
     virtual string className() const {
@@ -45,20 +29,31 @@ public:
     bool isA(const string& name) const override {
         return name == "Desc" || Base::isA(name);
     }
-
-    void method2Virtual() override {
-        cout << "[Desc] method2Virtual\n";
-    }
 };
 
-int main() {
+void testCast() {
+    cout << "\nПРОВЕРКА ПРИВЕДЕНИЯ ТИПОВ\n";
+
     Base* b = new Desc();
 
-    cout << "Тип: " << b->className() << endl;
+    cout << "className(): " << b->className() << endl;
 
     if (b->isA("Desc")) {
-        cout << "Это Desc\n";
+        cout << "Объект — Desc\n";
     }
 
+    cout << "\ndynamic_cast:\n";
+    Desc* d1 = dynamic_cast<Desc*>(b);
+    cout << "d1 = " << d1 << endl;
+
+    cout << "\nC-style cast:\n";
+    Desc* d2 = (Desc*)b;
+    cout << "d2 = " << d2 << endl;
+
     delete b;
+}
+
+int main() {
+    testCast();
+    return 0;
 }
