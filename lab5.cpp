@@ -10,50 +10,42 @@ public:
     virtual ~Base() {
         cout << "[Base] Деструктор\n";
     }
-
-    virtual string className() const {
-        return "Base";
-    }
-
-    virtual bool isA(const string& name) const {
-        return name == "Base";
-    }
 };
 
 class Desc : public Base {
 public:
-    string className() const override {
-        return "Desc";
+    Desc() {
+        cout << "[Desc] Конструктор\n";
     }
 
-    bool isA(const string& name) const override {
-        return name == "Desc" || Base::isA(name);
+    ~Desc() override {
+        cout << "[Desc] Деструктор\n";
     }
 };
 
-void testCast() {
-    cout << "\nПРОВЕРКА ПРИВЕДЕНИЯ ТИПОВ\n";
+void func1(Base obj) {
+    cout << "[func1] передача по значению (копия)\n";
+}
 
-    Base* b = new Desc();
+void func2(Base* obj) {
+    cout << "[func2] передача по указателю\n";
+}
 
-    cout << "className(): " << b->className() << endl;
+void func3(Base& obj) {
+    cout << "[func3] передача по ссылке\n";
+}
 
-    if (b->isA("Desc")) {
-        cout << "Объект — Desc\n";
-    }
+void testPass() {
+    cout << "\nПЕРЕДАЧА В ФУНКЦИИ\n";
 
-    cout << "\ndynamic_cast:\n";
-    Desc* d1 = dynamic_cast<Desc*>(b);
-    cout << "d1 = " << d1 << endl;
+    Desc d;
 
-    cout << "\nC-style cast:\n";
-    Desc* d2 = (Desc*)b;
-    cout << "d2 = " << d2 << endl;
-
-    delete b;
+    func1(d);
+    func2(&d);
+    func3(d);
 }
 
 int main() {
-    testCast();
+    testPass();
     return 0;
 }
