@@ -30,14 +30,38 @@ public:
     }
 };
 
+class Desc : public Base {
+public:
+    Desc() {
+        cout << "[Desc] Конструктор без параметров\n";
+    }
+
+    ~Desc() override {
+        cout << "[Desc] Деструктор\n";
+    }
+
+    void method2NonVirtual() {
+        cout << "[Desc] method2NonVirtual (перекрытие)\n";
+    }
+
+    void method1Virtual() override {
+        cout << "[Desc] method1Virtual вызывает method2Virtual\n";
+        method2Virtual();
+    }
+
+    void method2Virtual() override {
+        cout << "[Desc] method2Virtual\n";
+    }
+};
+
 int main() {
-    Base b;
+    Base* b = new Desc();
 
     cout << "\nНЕВИРТУАЛЬНЫЕ МЕТОДЫ\n";
-    b.method1NonVirtual();
+    b->method1NonVirtual();
 
     cout << "\nВИРТУАЛЬНЫЕ МЕТОДЫ\n";
-    b.method1Virtual();
+    b->method1Virtual();
 
-    return 0;
+    delete b;
 }
