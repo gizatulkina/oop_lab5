@@ -12,7 +12,6 @@ public:
     }
 
     void method1NonVirtual() {
-        cout << "[Base] method1NonVirtual вызывает method2NonVirtual\n";
         method2NonVirtual();
     }
 
@@ -21,32 +20,30 @@ public:
     }
 
     virtual void method1Virtual() {
-        cout << "[Base] method1Virtual вызывает method2Virtual\n";
         method2Virtual();
     }
 
     virtual void method2Virtual() {
         cout << "[Base] method2Virtual\n";
     }
+
+    virtual string className() const {
+        return "Base";
+    }
+
+    virtual bool isA(const string& name) const {
+        return name == "Base";
+    }
 };
 
 class Desc : public Base {
 public:
-    Desc() {
-        cout << "[Desc] Конструктор без параметров\n";
+    string className() const override {
+        return "Desc";
     }
 
-    ~Desc() override {
-        cout << "[Desc] Деструктор\n";
-    }
-
-    void method2NonVirtual() {
-        cout << "[Desc] method2NonVirtual (перекрытие)\n";
-    }
-
-    void method1Virtual() override {
-        cout << "[Desc] method1Virtual вызывает method2Virtual\n";
-        method2Virtual();
+    bool isA(const string& name) const override {
+        return name == "Desc" || Base::isA(name);
     }
 
     void method2Virtual() override {
@@ -57,11 +54,11 @@ public:
 int main() {
     Base* b = new Desc();
 
-    cout << "\nНЕВИРТУАЛЬНЫЕ МЕТОДЫ\n";
-    b->method1NonVirtual();
+    cout << "Тип: " << b->className() << endl;
 
-    cout << "\nВИРТУАЛЬНЫЕ МЕТОДЫ\n";
-    b->method1Virtual();
+    if (b->isA("Desc")) {
+        cout << "Это Desc\n";
+    }
 
     delete b;
 }
